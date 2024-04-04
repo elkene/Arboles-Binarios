@@ -2,7 +2,7 @@
   "tests": [
     {
       "name": "FUGAS",
-      "setup": "sudo apt-get install valgrind && make fuga && valgrind --log-file=fuga.txt ./Main",
+      "setup": "sudo apt-get install valgrind && make fuga && valgrind --log-file=fuga.txt ./arbolBin",
       "run": "grep -o \"no leaks\" fuga.txt",
       "input": "",
       "output": "no leaks",
