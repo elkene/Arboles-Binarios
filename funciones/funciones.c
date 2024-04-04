@@ -109,8 +109,8 @@ void BorrarNodo(ListaDoble *lista, void *dato) {
     } else {
         curr->next->prev = curr->prev;
     }
+
     free(curr);
-    free(curr->data); 
     lista->size--;
 }
 
