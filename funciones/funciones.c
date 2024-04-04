@@ -1,5 +1,6 @@
-#include<stdio.h>
-#include<stdlib.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "../nodo/nodo.h"
 #include "funciones.h"
 #include "../cola/lista.h"
@@ -120,6 +121,7 @@ int comparar(void *a, void *b) {
     int *int_b = (int *)b;
     return (*int_a - *int_b);
 }
+
 void imprimir_entero(void *dato) {
     int *valor = (int *)dato;
     printf("%d ", *valor);
@@ -207,6 +209,60 @@ void imprimirNivelOrden(NodoBinario *const arbol, void (*print)(void *)) {
             pushcola(&colaAuxiliar, nodo->der);
     }
 }
+
+NodoBinario **buscarNodo(NodoBinario **raiz, void *data, int (*comparar)(void *, void *)) {
+    if (*raiz == NULL || comparar((*raiz)->dato, data) == 0) {
+        return raiz;
+    }
+
+    if (comparar((*raiz)->dato, data) > 0) {
+        return buscarNodo(&((*raiz)->izq), data, comparar);
+    } else {
+        return buscarNodo(&((*raiz)->der), data, comparar);
+    }
+}
+
+NodoBinario **buscarMinimo(NodoBinario **raiz) {
+    NodoBinario **actual = raiz;
+
+    while ((*actual)->izq != NULL) {
+        actual = &((*actual)->izq);
+    }
+
+    return actual;
+}
+
+
+int eliminarNodo(NodoBinario **raiz, void *data, int (*comparar)(void *, void *)) {
+    NodoBinario **nborrar = buscarNodo(raiz, data, comparar);
+
+    if (*nborrar == NULL) {
+        return 0; // No se encontró el nodo
+    }
+
+    if ((*nborrar)->izq == NULL && (*nborrar)->der == NULL) {
+        free(*nborrar);
+        *nborrar = NULL;
+        return 1;
+    } else if ((*nborrar)->der == NULL) {
+        NodoBinario *temporal = *nborrar;
+        *nborrar = (*nborrar)->izq;
+        free(temporal);
+        temporal = NULL;
+        return 1;
+    } else if ((*nborrar)->izq == NULL) {
+        NodoBinario *temporal = *nborrar;
+        *nborrar = (*nborrar)->der;
+        free(temporal);
+        temporal = NULL;
+        return 1;
+    } else {
+        NodoBinario **minimo = buscarMinimo(&((*nborrar)->der));
+        (*nborrar)->dato = (*minimo)->dato;
+        return eliminarNodo(&((*nborrar)->der), (*minimo)->dato, comparar);
+    }
+}
+
 
 
 

@@ -27,6 +27,23 @@ int main() {
     printf("Recorrido en nivel orden: ");
     imprimirNivelOrden(raiz, imprimir_entero);
     printf("\n");
+    printf("Eliminar Nodo: ");
+    
+    int datoAEliminar = 25;
+    if (eliminarNodo(&raiz, &datoAEliminar, comparar)) {
+        printf("Nodo eliminado\n");
+        imprimirPreOrden(raiz, imprimir_entero);
+        printf("\n");
+        imprimirInOrden(raiz, imprimir_entero);
+        printf("\n");
+        imprimirPostOrden(raiz, imprimir_entero);
+        printf("\n");
+        imprimirNivelOrden(raiz, imprimir_entero);
+
+    } else {
+        printf("Nodo no encontrado\n");
+    }
+
     liberarArbol(raiz);
     
     return 0;

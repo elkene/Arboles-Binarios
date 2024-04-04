@@ -9,6 +9,12 @@ int comparar(void *a, void *b);
 void imprimir_entero(void *dato);
 void liberarArbol(NodoBinario *raiz);
 void imprimirNivelOrden(NodoBinario *const arbol, void (*print)(void *));
+int eliminarNodo(NodoBinario **raiz, void *dato, int(*comparar)(void *, void *));
+NodoBinario **buscarNodo(NodoBinario **raiz, void *data, int (*comparar)(void *, void *));
+NodoBinario **buscarMinimo(NodoBinario **raiz);
+
+
+
 void IniciarListaDoble(ListaDoble *lista);
 void AddHead(ListaDoble *lista, void *dato);
 void AddTail(ListaDoble *lista, void *dato);
