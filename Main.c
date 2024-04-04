@@ -28,7 +28,7 @@ int main() {
     imprimirNivelOrden(raiz, imprimir_entero);
     printf("\n");
     printf("Eliminar Nodo: ");
-    
+
     int datoAEliminar = 25;
     if (eliminarNodo(&raiz, &datoAEliminar, comparar)) {
         printf("Nodo eliminado\n");
@@ -46,5 +46,5 @@ int main() {
 
     liberarArbol(raiz);
     
-    return 0;
+    return 0; 
 }
