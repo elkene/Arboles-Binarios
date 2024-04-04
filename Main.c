@@ -1,6 +1,5 @@
-#include<stdio.h>
-#include<conio.h>
-#include<stdlib.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include "nodo/nodo.h"
 #include "funciones/funciones.h"
 
@@ -8,7 +7,7 @@
 int main() {
     NodoBinario *raiz = NULL;
 
-    int valores[] = {100,50,25,75,150};
+    int valores[] = {100, 50, 25, 75, 150};
     for (int i = 0; i < sizeof(valores) / sizeof(valores[0]); i++) {
         ingresarElementoArbol(&raiz, &valores[i], comparar);
     }
@@ -24,7 +23,11 @@ int main() {
     printf("Recorrido en postorden: ");
     imprimirPostOrden(raiz, imprimir_entero);
     printf("\n");
-
-
+    
+    printf("Recorrido en nivel orden: ");
+    imprimirNivelOrden(raiz, imprimir_entero);
+    printf("\n");
+    liberarArbol(raiz);
+    
     return 0;
 }
