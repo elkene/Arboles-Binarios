@@ -237,7 +237,7 @@ int eliminarNodo(NodoBinario **raiz, void *data, int (*comparar)(void *, void *)
     NodoBinario **nborrar = buscarNodo(raiz, data, comparar);
 
     if (*nborrar == NULL) {
-        return 0; // No se encontró el nodo
+        return 0;
     }
 
     if ((*nborrar)->izq == NULL && (*nborrar)->der == NULL) {
