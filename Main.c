@@ -45,8 +45,10 @@ int main(int argc, char *argv[]) {
 
     liberarArbol(raiz);
 
+
     free(min); 
     free(max); 
+    
 
     return 0;
 }
