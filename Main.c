@@ -1,50 +1,45 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include "nodo/nodo.h"
 #include "funciones/funciones.h"
+#include "cola/cola.h"
 
 
-int main() {
+int main(int argc, char *argv[]) {
     NodoBinario *raiz = NULL;
+    srand(time(NULL));
 
-    int valores[] = {100, 50, 25, 75, 150};
-    for (int i = 0; i < sizeof(valores) / sizeof(valores[0]); i++) {
-        ingresarElementoArbol(&raiz, &valores[i], comparar);
+    for (int i = 0; i < 10; i++) {
+        void *p = malloc(sizeof(float));
+        *(float *)p = 1 + (rand() / (float)RAND_MAX) * (20 - 1);
+        ingresarElementoArbol(&raiz, p, comparar);
     }
 
     printf("Recorrido en preorden: ");
-    imprimirPreOrden(raiz, imprimir_entero);
+    imprimirPreOrden(raiz, imprimir_float);
     printf("\n");
 
     printf("Recorrido en inorden: ");
-    imprimirInOrden(raiz, imprimir_entero);
+    imprimirInOrden(raiz, imprimir_float);
     printf("\n");
 
     printf("Recorrido en postorden: ");
-    imprimirPostOrden(raiz, imprimir_entero);
+    imprimirPostOrden(raiz, imprimir_float);
     printf("\n");
-    
-    printf("Recorrido en nivel orden: ");
-    imprimirNivelOrden(raiz, imprimir_entero);
+    printf("Recorrido en nivel: ");
+    imprimirNivelOrden(raiz, imprimir_float);
     printf("\n");
-    printf("Eliminar Nodo: ");
 
-    int datoAEliminar = 25;
-    if (eliminarNodo(&raiz, &datoAEliminar, comparar)) {
-        printf("Nodo eliminado\n");
-        imprimirPreOrden(raiz, imprimir_entero);
-        printf("\n");
-        imprimirInOrden(raiz, imprimir_entero);
-        printf("\n");
-        imprimirPostOrden(raiz, imprimir_entero);
-        printf("\n");
-        imprimirNivelOrden(raiz, imprimir_entero);
+    printf("Altura del arbol: %d\n", alturaArbol(raiz));
 
-    } else {
-        printf("Nodo no encontrado\n");
-    }
+    float *min = encontrarMinimo(raiz);
+    float *max = encontrarMaximo(raiz);
+
+    printf("Numero mas chico en el arbol: %.2f\n", *min);
+    printf("Numero mas grande en el arbol: %.2f\n", *max);
 
     liberarArbol(raiz);
-    
-    return 0; 
+
+    return 0;
 }

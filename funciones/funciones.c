@@ -115,6 +115,15 @@ void BorrarNodo(ListaDoble *lista, void *dato) {
     lista->size--;
 }
 
+int alturaArbol(NodoBinario *raiz) {
+    if (raiz == NULL) {
+        return 0;
+    } else {
+        int altura_izquierda = alturaArbol(raiz->izq);
+        int altura_derecha = alturaArbol(raiz->der);
+        return (altura_izquierda > altura_derecha ? altura_izquierda : altura_derecha) + 1;
+    }
+}
 
 int comparar(void *a, void *b) {
     int *int_a = (int *)a;
@@ -125,6 +134,33 @@ int comparar(void *a, void *b) {
 void imprimir_entero(void *dato) {
     int *valor = (int *)dato;
     printf("%d ", *valor);
+}
+
+void imprimir_float(void *dato) {
+    float *valor = (float *)dato;
+    printf("\n%.2f ", *valor);
+}
+
+void *encontrarMinimo(NodoBinario *raiz) {
+    if (raiz == NULL) {
+        return NULL;
+    }
+    NodoBinario *actual = raiz;
+    while (actual->izq != NULL) {
+        actual = actual->izq;
+    }
+    return actual->dato;
+}
+
+void *encontrarMaximo(NodoBinario *raiz) {
+    if (raiz == NULL) {
+        return NULL;
+    }
+    NodoBinario *actual = raiz;
+    while (actual->der != NULL) {
+        actual = actual->der;
+    }
+    return actual->dato;
 }
 
 void ingresarNodo(NodoBinario **raiz, NodoBinario *nuevo, int (*comparar)(void *, void *)) {
@@ -262,10 +298,4 @@ int eliminarNodo(NodoBinario **raiz, void *data, int (*comparar)(void *, void *)
         return eliminarNodo(&((*nborrar)->der), (*minimo)->dato, comparar);
     }
 }
-
-
-
-
-
-
 
