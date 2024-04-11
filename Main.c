@@ -5,14 +5,17 @@
 #include "funciones/funciones.h"
 #include "cola/cola.h"
 
-
 int main(int argc, char *argv[]) {
     NodoBinario *raiz = NULL;
     srand(time(NULL));
 
     for (int i = 0; i < 10; i++) {
-        void *p = malloc(sizeof(float));
-        *(float *)p = 1 + (rand() / (float)RAND_MAX) * (20 - 1);
+        float *p = malloc(sizeof(float));
+        if (p == NULL) {
+            printf("Error: No se pudo asignar memoria.\n");
+            return 1;
+        }
+        *p = 1 + (rand() / (float)RAND_MAX) * (20 - 1);
         ingresarElementoArbol(&raiz, p, comparar);
     }
 
@@ -27,6 +30,7 @@ int main(int argc, char *argv[]) {
     printf("Recorrido en postorden: ");
     imprimirPostOrden(raiz, imprimir_float);
     printf("\n");
+
     printf("Recorrido en nivel: ");
     imprimirNivelOrden(raiz, imprimir_float);
     printf("\n");
@@ -38,8 +42,11 @@ int main(int argc, char *argv[]) {
 
     printf("Numero mas chico en el arbol: %.2f\n", *min);
     printf("Numero mas grande en el arbol: %.2f\n", *max);
-    for (int i = 0; i < 10; i++) {
+
     liberarArbol(raiz);
-    }    
+
+    free(min); 
+    free(max); 
+
     return 0;
 }
