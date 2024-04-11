@@ -38,8 +38,8 @@ int main(int argc, char *argv[]) {
 
     printf("Numero mas chico en el arbol: %.2f\n", *min);
     printf("Numero mas grande en el arbol: %.2f\n", *max);
-
+    for (int i = 0; i < 10; i++) {
     liberarArbol(raiz);
-
+    }    
     return 0;
 }
