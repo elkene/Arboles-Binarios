@@ -1,6 +1,7 @@
 #include "lista.h"
 typedef ListaDoble Cola;
-
+NodoDoble *crearNodoCola(NodoBinario *nodo);
+void inicializarCola(Cola *cola);
 void pushcola(Cola *cola, void *dato);
 void *popcola(Cola *cola);
 void imprimircola(Cola *cola, void (*Print_func)(void *));

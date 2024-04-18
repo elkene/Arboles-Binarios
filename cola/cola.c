@@ -7,6 +7,18 @@
 #include "../nodo/nodo.h"
 #include "lista.h"
 
+NodoDoble *crearNodoCola(NodoBinario *nodo) {
+    NodoDoble *nuevoNodo = (NodoDoble *)malloc(sizeof(NodoDoble));
+    nuevoNodo->data = nodo;
+    nuevoNodo->next = NULL;
+    return nuevoNodo;
+}
+
+void inicializarCola(Cola *cola) {
+    cola->head = NULL;
+    cola->tail = NULL;
+}
+
 void pushcola(Cola *cola, void *dato)
 {
     AddTail(cola,dato);

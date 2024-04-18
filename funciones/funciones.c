@@ -5,6 +5,7 @@
 #include "funciones.h"
 #include "../cola/lista.h"
 #include "../cola/cola.h"
+#include "../pilas/pilas.h"
 
 
 
@@ -131,6 +132,18 @@ int comparar(void *a, void *b) {
     return (*int_a - *int_b);
 }
 
+int compararchar(const void *a, const void *b) {
+    if (*(char *)a < *(char *)b) return -1;
+    if (*(char *)a > *(char *)b) return 1;
+    return 0;
+}
+
+int compararEnteros(const void *a, const void *b) {
+    return (*(int *)a - *(int *)b);
+}
+
+
+
 void imprimir_entero(void *dato) {
     int *valor = (int *)dato;
     printf("%d ", *valor);
@@ -246,6 +259,34 @@ void imprimirNivelOrden(NodoBinario *const arbol, void (*print)(void *)) {
     }
 }
 
+void imprimirNivelInverso(NodoBinario *const arbol, void(*print)(void*)){
+    if(arbol==NULL)
+    return;
+
+    Cola aux;
+    IniciarListaDoble(&aux);
+    pushcola(&aux,arbol);
+    Pilas pila;
+    IniciarListaDoble(&pila);
+
+    while(!estavaciacola(&aux)){
+        NodoBinario *nodo=(NodoBinario *)popcola(&aux);
+        push(&pila,nodo);
+        if(nodo->izq!=NULL){
+            pushcola(&aux,nodo->izq);
+        }
+        if(nodo->der!=NULL){
+            pushcola(&aux,nodo->der);
+        }
+    }
+    while (!estaVacia(&pila)) {
+        NodoBinario *nodo = (NodoBinario *)pop(&pila);
+        print(nodo->dato);
+    }
+
+    LiberarLista(&pila);
+}
+
 NodoBinario **buscarNodo(NodoBinario **raiz, void *data, int (*comparar)(void *, void *)) {
     if (*raiz == NULL || comparar((*raiz)->dato, data) == 0) {
         return raiz;
@@ -298,4 +339,206 @@ int eliminarNodo(NodoBinario **raiz, void *data, int (*comparar)(void *, void *)
         return eliminarNodo(&((*nborrar)->der), (*minimo)->dato, comparar);
     }
 }
+
+void imprimirArbolGrafico(NodoBinario *raiz, void (*print)(void *)) {
+    if (raiz == NULL) {
+        printf("Árbol vacío.\n");
+        return;
+    }
+
+    Cola colaAuxiliar;
+    IniciarListaDoble(&colaAuxiliar);
+    pushcola(&colaAuxiliar, raiz);
+
+    int nodosNivelActual = 1;
+    int nodosNivelSiguiente = 0;
+    int nivel = 0;
+    int espacio = 4; 
+
+    while (!estavaciacola(&colaAuxiliar)) {
+        NodoBinario *nodo = (NodoBinario *)popcola(&colaAuxiliar);
+        nodosNivelActual--;
+
+        if (nodo->izq != NULL) {
+            pushcola(&colaAuxiliar, nodo->izq);
+            nodosNivelSiguiente++;
+        }
+
+        if (nodo->der != NULL) {
+            pushcola(&colaAuxiliar, nodo->der);
+            nodosNivelSiguiente++;
+        }
+
+        for (int i = 0; i < nivel * espacio; i++) {
+            printf(" ");
+        }
+
+        if (nodo->izq != NULL || nodo->der != NULL) {
+            printf("(");
+        }
+
+        print(nodo->dato);
+
+        if (nodo->izq != NULL || nodo->der != NULL) {
+            printf(")");
+        }
+
+        if (nodosNivelActual > 0) {
+            printf("/");
+        }
+
+        if (nodosNivelSiguiente > 0) {
+            printf("\\");
+        }
+
+        if (nodosNivelActual == 0) {
+            printf("\n");
+            nodosNivelActual = nodosNivelSiguiente;
+            nodosNivelSiguiente = 0;
+            nivel++;
+        }
+    }
+}
+
+void imprimirArbolGraficoInverso(NodoBinario *raiz, void (*print)(void *))
+{
+     if (raiz == NULL) {
+        printf("Árbol vacío.\n");
+        return;
+    }
+
+    Pilas aux;
+    IniciarListaDoble(&aux);
+    push(&aux, raiz);
+
+    int nodosNivelActual = 1;
+    int nodosNivelSiguiente = 0;
+    int nivel = 0;
+    int espacio = 4; 
+
+    while (!estavaciacola(&aux)) {
+        NodoBinario *nodo = (NodoBinario *)pop(&aux);
+        nodosNivelActual--;
+
+        if (nodo->izq != NULL) {
+            push(&aux, nodo->izq);
+            nodosNivelSiguiente++;
+        }
+
+        if (nodo->der != NULL) {
+            push(&aux, nodo->der);
+            nodosNivelSiguiente++;
+        }
+
+        for (int i = 0; i < nivel * espacio; i++) {
+            printf(" ");
+        }
+
+        if (nodo->izq != NULL || nodo->der != NULL) {
+            printf("(");
+        }
+
+        print(nodo->dato);
+
+        if (nodo->izq != NULL || nodo->der != NULL) {
+            printf(")");
+        }
+
+        if (nodosNivelActual > 0) {
+            printf("/");
+        }
+
+        if (nodosNivelSiguiente > 0) {
+            printf("\\");
+        }
+
+        if (nodosNivelActual == 0) {
+            printf("\n");
+            nodosNivelSiguiente = nodosNivelSiguiente;
+            nodosNivelSiguiente = 0;
+            nivel++;
+        }
+    }
+
+}
+typedef int (*Comparar)(const void *, const void *);
+
+int contarNodosCompletos(NodoBinario *raiz) {
+    if (raiz == NULL) {
+        return 0;
+    }
+
+    if (raiz->izq != NULL && raiz->der != NULL) {
+        return 1 + contarNodosCompletos(raiz->izq) + contarNodosCompletos(raiz->der);
+    }
+
+    return contarNodosCompletos(raiz->izq) + contarNodosCompletos(raiz->der);
+}
+
+int contarSemiCompletos(NodoBinario *raiz) {
+    if (raiz == NULL || (raiz->izq == NULL && raiz->der == NULL)) {
+        return 0;
+    }
+
+    int semiCompletos = 0;
+
+    if ((raiz->izq == NULL && raiz->der != NULL) || (raiz->izq != NULL && raiz->der == NULL)) {
+        semiCompletos = 1;
+    }
+
+    semiCompletos += contarSemiCompletos(raiz->izq);
+    semiCompletos += contarSemiCompletos(raiz->der);
+
+    return semiCompletos;
+}
+//Funciones del examen
+void actualizarFrecuencias(NodoBinario *raiz, FrecuenciaValor *frecuencias, int *maxFrecuencia, int (*comparar)(const void *, const void *)) {
+    if (raiz == NULL) {
+        return;
+    }
+
+    actualizarFrecuencias(raiz->izq, frecuencias, maxFrecuencia, comparar);
+
+    int i = 0;
+    while (frecuencias[i].valor != NULL && comparar(raiz->dato, frecuencias[i].valor) != 0) {
+        i++;
+    }
+
+    if (frecuencias[i].valor == NULL) {
+        frecuencias[i].valor = raiz->dato;
+    }
+    frecuencias[i].frecuencia++;
+
+    if (frecuencias[i].frecuencia > *maxFrecuencia) {
+        *maxFrecuencia = frecuencias[i].frecuencia;
+    }
+
+    actualizarFrecuencias(raiz->der, frecuencias, maxFrecuencia, comparar);
+}
+
+void encontrarModa(NodoBinario *raiz, void ***moda, int *cantidadModa, int (*comparar)(const void *, const void *)) {
+    FrecuenciaValor frecuencias[100] = {{NULL, 0}};
+
+    int maxFrecuencia = 0;
+    actualizarFrecuencias(raiz, frecuencias, &maxFrecuencia, comparar);
+
+    int cantidad = 0;
+    for (int i = 0; frecuencias[i].valor != NULL; i++) {
+        if (frecuencias[i].frecuencia == maxFrecuencia) {
+            cantidad++;
+        }
+    }
+
+    void **valoresModa = (void **)malloc(cantidad * sizeof(void *));
+    int j = 0;
+    for (int i = 0; frecuencias[i].valor != NULL; i++) {
+        if (frecuencias[i].frecuencia == maxFrecuencia) {
+            valoresModa[j++] = frecuencias[i].valor;
+        }
+    }
+
+    *moda = valoresModa;
+    *cantidadModa = cantidad;
+}
+
 

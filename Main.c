@@ -5,48 +5,30 @@
 #include "funciones/funciones.h"
 #include "cola/cola.h"
 
-int main(int argc, char *argv[]) {
-    NodoBinario *raiz = NULL;
-    srand(time(NULL));
 
-    for (int i = 0; i < 10; i++) {
-        float *p = malloc(sizeof(float));
-        if (p == NULL) {
-            printf("Error: No se pudo asignar memoria.\n");
-            return 1;
-        }
-        *p = 1 + (rand() / (float)RAND_MAX) * (20 - 1);
-        ingresarElementoArbol(&raiz, p, comparar);
+int main() {
+    NodoBinario *raiz = NULL;
+
+    int valores[] = {10,5,4,3,5,6,6,7,15,15,11,12,17,16,18};
+    for (int i = 0; i < sizeof(valores) / sizeof(valores[0]); i++) {
+        ingresarElementoArbol(&raiz, &valores[i], comparar);
     }
 
-    printf("Recorrido en preorden: ");
-    imprimirPreOrden(raiz, imprimir_float);
+    void **moda;
+    int cantidadModa;
+    encontrarModa(raiz, &moda, &cantidadModa, compararEnteros);
+
+    printf("Valores:\n");
+    imprimirInOrden(raiz,imprimir_entero);    
     printf("\n");
-
-    printf("Recorrido en inorden: ");
-    imprimirInOrden(raiz, imprimir_float);
+    printf("Moda(s): ");
+    for (int i = 0; i < cantidadModa; i++) {
+        printf("%d ", *(int *)moda[i]);
+    }
     printf("\n");
+    
 
-    printf("Recorrido en postorden: ");
-    imprimirPostOrden(raiz, imprimir_float);
-    printf("\n");
-
-    printf("Recorrido en nivel: ");
-    imprimirNivelOrden(raiz, imprimir_float);
-    printf("\n");
-
-    printf("Altura del arbol: %d\n", alturaArbol(raiz));
-
-    float *min = encontrarMinimo(raiz);
-    float *max = encontrarMaximo(raiz);
-
-    printf("Numero mas chico en el arbol: %.2f\n", *min);
-    printf("Numero mas grande en el arbol: %.2f\n", *max);
-
-    liberarArbol(raiz);
-
-    free(min); 
-    free(max); 
-
-    return 0;
+    free(moda);
+    
+    return 0; 
 }

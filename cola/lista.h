@@ -6,3 +6,8 @@ typedef struct {
     NodoDoble *tail;
     int size;
 } ListaDoble;
+
+typedef struct {
+    void *valor;
+    int frecuencia;
+} FrecuenciaValor;
