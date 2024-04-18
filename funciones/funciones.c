@@ -238,7 +238,8 @@ void liberarArbol(NodoBinario *raiz) {
 
     liberarArbol(raiz->izq);
     liberarArbol(raiz->der);
-    free(raiz);
+    free(raiz->dato); 
+    free(raiz); 
 }
 void imprimirNivelOrden(NodoBinario *const arbol, void (*print)(void *)) {
     if (arbol == NULL)
