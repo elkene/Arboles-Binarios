@@ -29,6 +29,7 @@ int main() {
     
 
     free(moda);
+    liberarArbol(raiz);
     
     return 0; 
 }
