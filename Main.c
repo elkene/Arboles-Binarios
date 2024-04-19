@@ -27,9 +27,8 @@ int main() {
     }
     printf("\n");
     
-
-    free(moda);
     liberarArbol(raiz);
+    free(moda);
     
     return 0; 
 }
